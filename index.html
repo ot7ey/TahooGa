@@ -9,91 +9,130 @@
 
 <div class="container">
 
-  <!-- SCREEN NICKNAME -->
-  <div id="start-screen">
+  <!-- START -->
+  <div id="start">
     <h1>Quiz "Tahoo Ga"</h1>
-    <input type="text" id="nickname" placeholder="Masukkan nickname kamu">
+    <input type="text" id="nickname" placeholder="Masukkan nama">
     <button onclick="startQuiz()">Mulai</button>
   </div>
 
-  <!-- SCREEN QUIZ -->
-  <div id="quiz-screen" class="hidden">
-    <h2 id="question">Soal muncul disini</h2>
+  <!-- QUIZ -->
+  <div id="quiz" class="hidden">
+    <h2 id="question"></h2>
 
     <div class="answers">
-      <div class="card" onclick="selectAnswer(this, 0)"></div>
-      <div class="card" onclick="selectAnswer(this, 1)"></div>
-      <div class="card" onclick="selectAnswer(this, 2)"></div>
-      <div class="card" onclick="selectAnswer(this, 3)"></div>
+      <div class="card" onclick="checkAnswer(0, this)"></div>
+      <div class="card" onclick="checkAnswer(1, this)"></div>
+      <div class="card" onclick="checkAnswer(2, this)"></div>
+      <div class="card" onclick="checkAnswer(3, this)"></div>
     </div>
   </div>
 
-  <!-- SCREEN RESULT -->
-  <div id="result-screen" class="hidden">
-    <h1>Hasil Quiz</h1>
-    <p id="result-text"></p>
+  <!-- RESULT -->
+  <div id="result" class="hidden">
+    <h2 id="hasil"></h2>
   </div>
 
 </div>
 
+<!-- SOUND -->
+<audio id="soundBenar" src="benar.mp3"></audio>
+<audio id="soundSalah" src="salah.mp3"></audio>
+
 <script>
+let nickname = "";
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
 const questions = [
-  {q: "Ibukota Indonesia?", a: ["Jakarta","Bandung","Surabaya","Medan"], correct: 0},
-  {q: "Planet terbesar?", a: ["Mars","Bumi","Jupiter","Venus"], correct: 2},
-  {q: "2+2=?", a: ["3","4","5","6"], correct: 1},
-  {q: "Warna langit?", a: ["Merah","Biru","Hijau","Kuning"], correct: 1},
-  {q: "Hewan tercepat?", a: ["Cheetah","Kuda","Singa","Gajah"], correct: 0},
-  {q: "Air mendidih pada?", a: ["50°C","100°C","80°C","120°C"], correct: 1},
-  {q: "Benua terbesar?", a: ["Eropa","Asia","Afrika","Australia"], correct: 1},
-  {q: "Bahasa resmi Indonesia?", a: ["Jawa","Indonesia","Melayu","Sunda"], correct: 1},
-  {q: "Gunung tertinggi?", a: ["Everest","Fuji","Semeru","Kilimanjaro"], correct: 0},
-  {q: "Matahari adalah?", a: ["Planet","Bintang","Bulan","Asteroid"], correct: 1}
+  {
+    question: "Ibukota Indonesia?",
+    options: ["Bandung","Jakarta","Medan","Bali"],
+    answer: 1
+  },
+  {
+    question: "2 + 2 = ?",
+    options: ["3","4","5","6"],
+    answer: 1
+  },
+  {
+    question: "Planet terbesar?",
+    options: ["Mars","Bumi","Jupiter","Venus"],
+    answer: 2
+  },
+  {
+    question: "Air mendidih pada?",
+    options: ["50°C","100°C","80°C","120°C"],
+    answer: 1
+  },
+  {
+    question: "Nama Lengkap humai",
+    options: ["Humaira Biya Naren","Humaira Bahiya Narendra","Humairah Bahiya Narendra","Humayra Baiya Naren"],
+    answer: 1
+  },
 ];
 
-let current = 0;
-let score = 0;
-let nickname = "";
-
-function startQuiz(){
+function startQuiz() {
   nickname = document.getElementById("nickname").value;
-  if(nickname === "") return alert("Isi nickname dulu ya");
 
-  document.getElementById("start-screen").classList.add("hidden");
-  document.getElementById("quiz-screen").classList.remove("hidden");
+  if (nickname === "") {
+    alert("Isi dulu namanya");
+    return;
+  }
+
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
 
   loadQuestion();
 }
 
-function loadQuestion(){
-  let q = questions[current];
-  document.getElementById("question").innerText = q.q;
+function loadQuestion() {
+  answered = false;
+
+  let q = questions[currentQuestion];
+  document.getElementById("question").innerText = q.question;
 
   let cards = document.querySelectorAll(".card");
-  cards.forEach((card, i)=>{
-    card.innerHTML = `<div class="inner">${q.a[i]}</div>`;
+
+  cards.forEach((card, i) => {
+    card.innerHTML = `<div class="inner">${q.options[i]}</div>`;
     card.classList.remove("correct","wrong","flip");
+    card.style.pointerEvents = "auto";
   });
 }
 
-function selectAnswer(el, index){
-  let correct = questions[current].correct;
+function checkAnswer(index, el) {
+  if (answered) return;
 
+  answered = true;
+
+  let correct = questions[currentQuestion].answer;
   let cards = document.querySelectorAll(".card");
+
   cards.forEach(c => c.style.pointerEvents = "none");
 
-  if(index === correct){
+  if (index === correct) {
     el.classList.add("correct","flip");
     el.innerHTML = "<div class='inner'>BENAR</div>";
     score += 10;
+
+    let s = document.getElementById("soundBenar");
+    s.currentTime = 0;
+    s.play();
   } else {
     el.classList.add("wrong","flip");
     el.innerHTML = "<div class='inner'>SALAH</div>";
+
+    let s = document.getElementById("soundSalah");
+    s.currentTime = 0;
+    s.play();
   }
 
-  setTimeout(()=>{
-    current++;
-    if(current < questions.length){
-      cards.forEach(c => c.style.pointerEvents = "auto");
+  setTimeout(() => {
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
       loadQuestion();
     } else {
       showResult();
@@ -101,12 +140,12 @@ function selectAnswer(el, index){
   }, 1000);
 }
 
-function showResult(){
-  document.getElementById("quiz-screen").classList.add("hidden");
-  document.getElementById("result-screen").classList.remove("hidden");
+function showResult() {
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
 
-  document.getElementById("result-text").innerText =
-    `${nickname}, skor kamu: ${score}`;
+  document.getElementById("hasil").innerText =
+    nickname + " | Skor: " + score;
 }
 </script>
 
