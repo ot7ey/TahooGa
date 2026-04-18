@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Tahoo Ga</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- SCREEN NICKNAME -->
+  <div id="start-screen">
+    <h1>Quiz "Tahoo Ga"</h1>
+    <input type="text" id="nickname" placeholder="Masukkan nickname kamu">
+    <button onclick="startQuiz()">Mulai</button>
+  </div>
+
+  <!-- SCREEN QUIZ -->
+  <div id="quiz-screen" class="hidden">
+    <h2 id="question">Soal muncul disini</h2>
+
+    <div class="answers">
+      <div class="card" onclick="selectAnswer(this, 0)"></div>
+      <div class="card" onclick="selectAnswer(this, 1)"></div>
+      <div class="card" onclick="selectAnswer(this, 2)"></div>
+      <div class="card" onclick="selectAnswer(this, 3)"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN RESULT -->
+  <div id="result-screen" class="hidden">
+    <h1>Hasil Quiz</h1>
+    <p id="result-text"></p>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {q: "Ibukota Indonesia?", a: ["Jakarta","Bandung","Surabaya","Medan"], correct: 0},
+  {q: "Planet terbesar?", a: ["Mars","Bumi","Jupiter","Venus"], correct: 2},
+  {q: "2+2=?", a: ["3","4","5","6"], correct: 1},
+  {q: "Warna langit?", a: ["Merah","Biru","Hijau","Kuning"], correct: 1},
+  {q: "Hewan tercepat?", a: ["Cheetah","Kuda","Singa","Gajah"], correct: 0},
+  {q: "Air mendidih pada?", a: ["50°C","100°C","80°C","120°C"], correct: 1},
+  {q: "Benua terbesar?", a: ["Eropa","Asia","Afrika","Australia"], correct: 1},
+  {q: "Bahasa resmi Indonesia?", a: ["Jawa","Indonesia","Melayu","Sunda"], correct: 1},
+  {q: "Gunung tertinggi?", a: ["Everest","Fuji","Semeru","Kilimanjaro"], correct: 0},
+  {q: "Matahari adalah?", a: ["Planet","Bintang","Bulan","Asteroid"], correct: 1}
+];
+
+let current = 0;
+let score = 0;
+let nickname = "";
+
+function startQuiz(){
+  nickname = document.getElementById("nickname").value;
+  if(nickname === "") return alert("Isi nickname dulu ya");
+
+  document.getElementById("start-screen").classList.add("hidden");
+  document.getElementById("quiz-screen").classList.remove("hidden");
+
+  loadQuestion();
+}
+
+function loadQuestion(){
+  let q = questions[current];
+  document.getElementById("question").innerText = q.q;
+
+  let cards = document.querySelectorAll(".card");
+  cards.forEach((card, i)=>{
+    card.innerHTML = `<div class="inner">${q.a[i]}</div>`;
+    card.classList.remove("correct","wrong","flip");
+  });
+}
+
+function selectAnswer(el, index){
+  let correct = questions[current].correct;
+
+  let cards = document.querySelectorAll(".card");
+  cards.forEach(c => c.style.pointerEvents = "none");
+
+  if(index === correct){
+    el.classList.add("correct","flip");
+    el.innerHTML = "<div class='inner'>BENAR</div>";
+    score += 10;
+  } else {
+    el.classList.add("wrong","flip");
+    el.innerHTML = "<div class='inner'>SALAH</div>";
+  }
+
+  setTimeout(()=>{
+    current++;
+    if(current < questions.length){
+      cards.forEach(c => c.style.pointerEvents = "auto");
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  }, 1000);
+}
+
+function showResult(){
+  document.getElementById("quiz-screen").classList.add("hidden");
+  document.getElementById("result-screen").classList.remove("hidden");
+
+  document.getElementById("result-text").innerText =
+    `${nickname}, skor kamu: ${score}`;
+}
+</script>
+
+</body>
+</html>
