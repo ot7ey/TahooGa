@@ -10,15 +10,17 @@
 <div class="container">
 
   <!-- START -->
-  <div id="start">
-    <h1>Quiz "Tahoo Ga"</h1>
-    <input type="text" id="nickname" placeholder="Masukkan nama">
-    <button onclick="startQuiz()">Mulai</button>
+  <div id="start" class="card-box">
+    <h1 class="title">Tahoo Ga</h1>
+
+    <input type="text" id="nickname" placeholder="Nama kamu siapaa" class="input-name">
+
+    <button onclick="startQuiz()" class="btn-start">Mulai</button>
   </div>
 
   <!-- QUIZ -->
-  <div id="quiz" class="hidden">
-    <h2 id="question"></h2>
+  <div id="quiz" class="hidden card-box">
+    <h2 id="question" class="question"></h2>
 
     <div class="answers">
       <div class="card" onclick="checkAnswer(0, this)"></div>
@@ -29,8 +31,9 @@
   </div>
 
   <!-- RESULT -->
-  <div id="result" class="hidden">
-    <h2 id="hasil"></h2>
+  <div id="result" class="hidden card-box">
+    <h2 id="hasil" class="result-text"></h2>
+    <button onclick="location.reload()" class="btn-start">Main Lagi</button>
   </div>
 
 </div>

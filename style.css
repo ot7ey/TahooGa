@@ -1,67 +1,119 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #fff8dc;
+  font-family:Arial, Helvetica, sans-serif;
+  background: repeating-linear-gradient(
+    0deg,
+    #fce4ec,
+    #fce4ec 10px,
+    #e1f5fe 10px,
+    #e1f5fe 20px,
+    #fff9c4 20px,
+    #fff9c4 30px
+  );
 }
 
+/* container tengah */
 .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* box utama (rumah vibes) */
+.card-box {
+  background: #f8bbd0;
+  padding: 40px;
+  border-radius: 20px;
+  width: 350px;
   text-align: center;
-  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  position: relative;
 }
 
-.hidden {
-  display: none;
+/* judul */
+.title {
+  color: #ad1457;
+  font-size: 32px;
+  margin-bottom: 20px;
 }
 
-h1, h2 {
-  color: #b8860b;
-}
-
-input {
+/* input */
+.input-name {
+  width: 80%;
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: none;
+  outline: none;
+  margin-bottom: 15px;
 }
 
-button {
+/* tombol */
+.btn-start {
   padding: 10px 20px;
-  margin-top: 10px;
   border: none;
-  background: #ffd54f;
+  background: #ffe082;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
+.btn-start:hover {
+  transform: scale(1.05);
+}
+
+/* soal */
+.question {
+  color: #880e4f;
+}
+
+/* jawaban */
 .answers {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 15px;
   margin-top: 20px;
 }
 
+/* kartu jawaban */
 .card {
-  background: #cbc6b0;
-  padding: 40px;
+  background: #fce4ec;
+  padding: 25px;
   border-radius: 15px;
   cursor: pointer;
-  font-size: 20px;
-  transition: 0.4s;
+  font-size: 18px;
+  transition: 0.3s;
+  border: 2px solid #f8bbd0;
 }
 
 .card:hover {
   transform: scale(1.05);
 }
 
+/* benar / salah */
 .correct {
-  background: #4caf50 !important;
+  background: #66bb6a !important;
   color: white;
 }
 
 .wrong {
-  background: #f44336 !important;
+  background: #ef5350 !important;
   color: white;
 }
 
+/* animasi flip */
 .flip {
   transform: rotateY(180deg);
+}
+
+/* result */
+.result-text {
+  color: #6a1b9a;
+  font-size: 22px;
+}
+
+/* hidden */
+.hidden {
+  display: none;
 }
